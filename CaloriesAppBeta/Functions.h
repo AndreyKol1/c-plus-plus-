@@ -5,49 +5,66 @@
 
 using namespace std;
 
-extern double height, weight, calories;
-extern int age, id, qstate;
-extern string Name;
-extern MYSQL* conn;
-extern MYSQL_ROW row;
-extern MYSQL_RES* res;
 
+struct Person {
+	int age, id;
+	string Name;
+	double height, weight, calories;
+};
+
+extern int qstate;
+extern	MYSQL* conn;
+extern	MYSQL_ROW row;
+extern	MYSQL_RES* res;
+
+
+
+void PickGender();
+double CaloriesCountMale(double height, double weight, int age);
+double CaloriesCountFemale(double height, double weight, int age);
+double ProteinInTake(Person& someone);
+void AddInfoToDataBase(Person& someone);
+void ShowInfo();
+void DeleteFromData(int IdToDelete);
+void HeightWeightAge(Person& someone);
+void EditInfoInDataBase(int idToEdit, Person& someone);
+void AddUser(Person& someone);
 
 void PickGender() {
 	cout << "Pick for whom you want to count calories" << endl
 		<< "1 - Male" << endl
 		<< "2 - Female" << endl;
-} 
+}
 
 double CaloriesCountMale(double height, double weight, int age) {
 	cout << "Your daily calorie allowance: ";
-	 return (13.75 * weight) + (5 * height) - (6.76 * age) + 655;
+	return (13.75 * weight) + (5 * height) - (6.76 * age) + 655;
 }
 double CaloriesCountFemale(double height, double weight, int age) {
 	cout << "Your daily calorie allowance: ";
 	return (9.56 * weight) + (1.85 * height) - (4.68 * age) + 655;
 }
-double ProteinInTake() {
+double ProteinInTake(Person& someone) {
 	double protein;
 	cout << "Enter your estimated protein per kilos: ";
 	cin >> protein;
 	cout << "Enter your weight: ";
-	cin >> weight;
+	cin >> someone.weight;
 	cin.ignore(100, '\n');
 	cout << "Your daily protein intake: ";
-	return weight * protein;
+	return someone.weight * protein;
 }
-void AddInfoToDataBase() {
+void AddInfoToDataBase(Person& someone) {
 	cout << "Enter your name: ";
-	cin >> Name;
+	cin >> someone.Name;
 	cout << "Enter your age: ";
-	cin >> age;
+	cin >> someone.age;
 	cout << "Enter your height: ";
-	cin >> height;
+	cin >> someone.height;
 	cout << "Enter your weight: ";
-	cin >> weight;
+	cin >> someone.weight;
 	cout << "Enter your daily calories taken from the calculations: ";
-	cin >> calories;
+	cin >> someone.calories;
 }
 
 void ShowInfo() {
@@ -77,13 +94,13 @@ void DeleteFromData(int IdToDelete)
 	}
 }
 
-void HeightWeightAge() {
+void HeightWeightAge(Person& someone) {
 	cout << "Your height: ";
-	cin >> height;
+	cin >> someone.height;
 	cout << "Your weight: ";
-	cin >> weight;
+	cin >> someone.weight;
 	cout << "Your age: ";
-	cin >> age;
+	cin >> someone.age;
 }
 void UpdateName(int idToEdit) {
 	string NewName;
@@ -150,7 +167,7 @@ void UpdateCalories(int idToEdit) {
 	mysql_free_result(res);
 }
 
-void EditInfoInDataBase(int idToEdit)
+void EditInfoInDataBase(int idToEdit, Person& someone)
 {
 	string selectQuery = "SELECT * FROM calories WHERE ID = " + to_string(idToEdit);
 	qstate = mysql_query(conn, selectQuery.c_str());
@@ -166,14 +183,14 @@ void EditInfoInDataBase(int idToEdit)
 	{
 		int number;
 		cout << "1 - Name" << endl
-			 << "2 - Age" << endl
-			 << "3 - Height" << endl
-			 << "4 - Weight" << endl
-			 << "5 - Calories intake" << endl
-			 << "0 - stop editing" << endl;
+			<< "2 - Age" << endl
+			<< "3 - Height" << endl
+			<< "4 - Weight" << endl
+			<< "5 - Calories intake" << endl
+			<< "0 - stop editing" << endl;
 		cout << "Enter new information you want to update:" << endl;
 		cin >> number;
-		switch (number){
+		switch (number) {
 		case 0:
 			cout << "Stopping program..." << endl;
 			return;
@@ -196,11 +213,11 @@ void EditInfoInDataBase(int idToEdit)
 		}
 	} while (VK_NUMPAD0);
 }
-void AddUser()
+void AddUser(Person& someone)
 {
 	string insertQuery;
-	insertQuery = "INSERT INTO Calories ( Name, Age, Height, Weight, Calories) VALUES ('" + Name + "'," + to_string(age)
-		+ ", " + to_string(height) + ", " + to_string(weight) + ", " + to_string(calories) + ")";
+	insertQuery = "INSERT INTO Calories ( Name, Age, Height, Weight, Calories) VALUES ('" + someone.Name + "'," + to_string(someone.age)
+		+ ", " + to_string(someone.height) + ", " + to_string(someone.weight) + ", " + to_string(someone.calories) + ")";
 
 	qstate = mysql_query(conn, insertQuery.c_str());
 
