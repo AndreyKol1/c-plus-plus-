@@ -11,6 +11,11 @@ MYSQL* conn;
 MYSQL_ROW row;
 MYSQL_RES* res;
 
+enum class EMenu {
+    EXIT,CALCOUNT, DPC, NEWUSER, DELETEUSER,
+    EDIT, SHOW
+};
+
 void Menu();
 double CaloriesCountMale(double height, double weight, int age);
 double CaloriesCountFemale(double height, double weight, int age);
@@ -25,6 +30,7 @@ void HeightWeightAge(Person& someone);
 
 int main()
 {
+    EMenu menu;
     Person someone;
     cout << "Greeting, this CalorieAppBeta!" << endl;
     conn = mysql_init(0);
@@ -50,12 +56,13 @@ int main()
         Menu();
         int USER_CHOICE;
         cin >> USER_CHOICE;
-        switch (USER_CHOICE) {
-        case 0:
+        menu = static_cast<EMenu>(USER_CHOICE);
+        switch (menu) {
+        case EMenu::EXIT:
             cout << "Closing application...";
             return 0;
             break;
-        case 1:
+        case EMenu::CALCOUNT:
             PickGender();
             int pick;
             cin >> pick;
@@ -70,7 +77,7 @@ int main()
                 break;
             }
             break;
-        case 2:
+        case EMenu::DPC:
             cout << "If you know your average number of proteins press 1, if not press 0: ";
             cin >> pick;
             switch (pick) {
@@ -82,22 +89,22 @@ int main()
                 break;
             }
             break;
-        case 3:
+        case EMenu::NEWUSER:
             AddInfoToDataBase(someone);
             AddUser(someone);
             break;
-        case 4:
+        case EMenu::DELETEUSER:
             cout << "Enter id you want to delete: ";
             cin >> someone.id;
             DeleteFromData(someone.id);
             break;
-        case 5:
+        case EMenu::EDIT:
             ShowInfo();
             cout << "Enter id you want to edit: ";
             cin >> someone.id;
             EditInfoInDataBase(someone.id, someone);
             break;
-        case 9:
+        case EMenu::SHOW:
             ShowInfo();
             break;
         }
