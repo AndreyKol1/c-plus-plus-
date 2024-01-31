@@ -13,7 +13,7 @@ MYSQL_RES* res;
 
 enum class EMenu {
     EXIT,CALCOUNT, DPC, NEWUSER, DELETEUSER,
-    EDIT, SHOW
+    EDIT, SHOW = 9
 };
 
 void Menu();
