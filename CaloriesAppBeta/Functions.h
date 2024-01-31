@@ -77,6 +77,7 @@ void ShowInfo() {
 				<< " weight: " << row[4]
 				<< " calories: " << row[5] << endl;
 		}
+	mysql_data_seek(res, 0);
 	}
 }
 
