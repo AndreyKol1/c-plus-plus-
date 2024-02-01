@@ -1,8 +1,7 @@
 #include <iostream>
 #include "Functions.h"
 #include <mysql.h>
-#include <string>
-#include < stdlib.h >
+#include <cstring>
 #define VK_NUMPAD0        0x60
 
 using namespace std;
